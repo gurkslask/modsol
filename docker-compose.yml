@@ -1,0 +1,10 @@
+version: "3"
+services:
+  styr:
+    build: ./control
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./control:/code
+    environment:
+      FLASK_ENV: development
