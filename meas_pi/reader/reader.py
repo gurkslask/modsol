@@ -51,11 +51,12 @@ if __name__ == '__main__':
     sensor1_id = ""
     sensor2_id = ""
     conn = sqlite3.connect(dbpath)
-    create_table(conn)
-    while True:
-        # Update every minute
-        sensor1_temp = read_sensor(sensor1)
-        update_values(sensor1_temp, 1)
-        sensor2_temp = read_sensor(sensor2)
-        update_values(sensor2_temp, 2)
-        time.sleep(60)
+    with conn:
+        create_table(conn)
+        while True:
+            # Update every minute
+            sensor1_temp = read_sensor(sensor1)
+            update_values(sensor1_temp, 1)
+            sensor2_temp = read_sensor(sensor2)
+            update_values(sensor2_temp, 2)
+            time.sleep(60)
