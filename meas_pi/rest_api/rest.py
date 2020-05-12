@@ -19,7 +19,12 @@ def read_sensor(sensor_id):
         row = c.fetchone()
     return row[1]
 
-api.add_resource(sensor, "/<string:sensor_id>")
+api.add_resource(sensor, "/sensor/<string:sensor_id>")
+
+@app.route("/")
+def home():
+    return "hello"
 
 if __name__ == '__main__':
     print(read_sensor("1"))
+    app.run(debug=True, host="192.168.1.8")
