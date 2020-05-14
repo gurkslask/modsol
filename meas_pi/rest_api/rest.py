@@ -5,6 +5,8 @@ from w1thermsensor import W1ThermSensor
 
 
 app = Flask(__name__)
+app.before_first_request(initsensor())
+
 api = Api(app)
 db_path = "../database.db"
 
@@ -41,7 +43,7 @@ class SensorById(Resource):
 class SensorList(Resource):
     def get(self):
         # Get list of available sensors
-        return W1ThermSensor.get_available_sensors()
+        return [sensor.id for sensor in W1ThermSensor.get_available_sensors()]
 
 def read_sensor(sensor_id):
     conn = sqlite3.connect(db_path)
@@ -105,6 +107,8 @@ def removesensor(sensor_name):
 
 def initsensor(sensordict):
     # Populate sensors dict with values from db
+    # First Initialize db
+    initdb()
     conn = sqlite3.connect(db_path)
     with conn:
         c = conn.cursor()
@@ -120,4 +124,4 @@ def initsensor(sensordict):
 if __name__ == '__main__':
     initdb()
     initsensor(sensors)
-    app.run(debug=True, host="127.0.0.1")
+    app.run(debug=True, host="0.0.0.0")
