@@ -45,6 +45,20 @@ class SensorList(Resource):
         # Get list of available sensors
         return [sensor.id for sensor in W1ThermSensor.get_available_sensors()]
 
+class GetDeclaredSensors(Resource):
+    def get(self):
+        # Get list of declared sensors
+        return sensors.keys()
+
+
+api.add_resource(SensorByName, "/sensorbyname/<string:sensor_name>")
+api.add_resource(SensorById, "/sensorbyid/<string:sensor_id>")
+api.add_resource(SensorList, "/sensorlist")
+
+@app.route("/")
+def home():
+    return "hello"
+
 def read_sensor(sensor_id):
     conn = sqlite3.connect(db_path)
     with conn:
@@ -56,14 +70,6 @@ def read_sensor(sensor_id):
         return row[1]
     else:
         return 'nodata'
-
-api.add_resource(SensorByName, "/sensorbyname/<string:sensor_name>")
-api.add_resource(SensorById, "/sensorbyid/<string:sensor_id>")
-api.add_resource(SensorList, "/sensorlist")
-
-@app.route("/")
-def home():
-    return "hello"
 
 def initdb():
     # Initialize database
