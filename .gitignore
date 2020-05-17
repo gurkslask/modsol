@@ -16,3 +16,5 @@
 #
 # Databases
 *.db
+# Ctags files
+tags
