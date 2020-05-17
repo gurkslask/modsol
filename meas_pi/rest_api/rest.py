@@ -5,7 +5,6 @@ from w1thermsensor import W1ThermSensor
 
 
 app = Flask(__name__)
-app.before_first_request(initsensor())
 
 api = Api(app)
 db_path = "../database.db"
@@ -19,7 +18,10 @@ sensors = {}
 class SensorByName(Resource):
     def get(self, sensor_name):
         # Get value from sensor
-        return {sensor_name: W1ThermSensor(W1ThermSensor.THERM_SENSOR_DS18B20, sensors[sensor_name]['id'])}
+        try:
+            return {sensor_name: W1ThermSensor(W1ThermSensor.THERM_SENSOR_DS18B20, sensors[sensor_name]['id']).get_temperature()}
+        except KeyError:
+            return "Sensor doesnt exist"
 
     def put(self, sensor_name ):
         # Name a sensor, id and name
@@ -37,7 +39,7 @@ class SensorByName(Resource):
 class SensorById(Resource):
     def get(self, sensor_id):
         # Get value of sensor by supplying sensor id
-        return W1ThermSensor(W1ThermSensor.THERM_SENSOR_DS18B20, sensor_id)
+        return W1ThermSensor(W1ThermSensor.THERM_SENSOR_DS18B20, sensor_id).get_temperature()
 
 
 class SensorList(Resource):
@@ -48,12 +50,14 @@ class SensorList(Resource):
 class GetDeclaredSensors(Resource):
     def get(self):
         # Get list of declared sensors
-        return sensors.keys()
+        print(sensors)
+        return [val for val in sensors.keys()]
 
 
 api.add_resource(SensorByName, "/sensorbyname/<string:sensor_name>")
 api.add_resource(SensorById, "/sensorbyid/<string:sensor_id>")
-api.add_resource(SensorList, "/sensorlist")
+api.add_resource(SensorList, "/sensorlist/")
+api.add_resource(GetDeclaredSensors, "/getdeclaredsensors/")
 
 @app.route("/")
 def home():
@@ -125,7 +129,6 @@ def initsensor(sensordict):
         print(row)
         sensordict[row[1]] = {"id" : row[2]}
     return sensordict
-
 
 if __name__ == '__main__':
     initdb()

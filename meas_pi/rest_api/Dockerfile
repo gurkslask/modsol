@@ -1,8 +1,4 @@
-FROM python
-WORKDIR /code
-ENV FLASK_APP rest.py
-ENV FLASK_RUN_HOST 0.0.0.0
-COPY requirements.txt requirements.txt
-RUN pip install -r requirements.txt
-COPY . . 
-CMD ["flask", "run"]
+FROM python:3
+WORKDIR /usr/src/rest_api
+COPY requirements.txt ./
+RUN pip install --no-cache-dir flask
