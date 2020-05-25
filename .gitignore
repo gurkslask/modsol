@@ -18,3 +18,5 @@
 *.db
 # Ctags files
 tags
+# pycache
+__pycache__
