@@ -1,27 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 from pymodbus3.client.sync import ModbusTcpClient
-from pymodbus3.exceptions import ConnectionException
-from ModbusDigitalInputIOCardClass import ModbusDigitalInputIOCard
-from ModbusDigitalOutputIOCardClass import ModbusDigitalOutputIOCard
-import datetime
 from distutils.util import strtobool
-
-IOVariables = {'b_VS1_CP1_DO': {'Value': 0, 'IOdevice': 2048, 'IOadress': 3, 'Comment': 'Radiator cirk pumpen'}}
-
-def runModBus(IOVariables):
-    client = ModbusTcpClient('192.168.1.9')
-    Digital_Out_1 = ModbusDigitalOutputIOCard(2048, client, IOVariables)          
-    try:
-        Digital_Out_1.WriteStatus()
-    except ConnectionException:
-        print('A connection error to the modbus occured at {}'.format(
-            datetime.datetime.now()
-            )
-        )
-        pass
-    client.close()      
-
 
 
 class ModbusDigitalOutputIOCard():
@@ -68,7 +48,3 @@ class ModbusDigitalOutputIOCard():
     def WriteStatus(self):
         #Write it all down to the modbus device
         self.client.write_registers(self.IOadress, self.BinToDec())
-
-
-
-

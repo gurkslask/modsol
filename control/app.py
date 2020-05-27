@@ -3,16 +3,11 @@ import time
 from flask import Flask
 from flask_restful import Resource, Api
 
-app = Flask(__name__)
-api = Api(app)
+from modbus import IOVariables, runModBus
 
-class pumpresource(Resource):
-    def get(self):
-        return {"pump 1": "RRun"}
+while True:
+    IOVariables['b_VS1_CP1_DO']['Value'] = not IOVariables['b_VS1_CP1_DO']['Value']
+    runModBus(IOVariables)
+    print(IOVariables['b_VS1_CP1_DO']['Value'] )
 
-api.add_resource(pumpresource, "/")
-
-"""@app.route('/')
-def hello():
-    return "Hello world!"""
-
+    time.sleep(5)
