@@ -61,7 +61,7 @@ api.add_resource(GetDeclaredSensors, "/getdeclaredsensors/")
 
 @app.route("/")
 def home():
-    return "hello"
+    return "/sensorbyname/<string:sensor_name><br>/sensorbyid/<string:sensor_id><br>/sensorlist/<br>/getdeclaredsensors/<br>"
 
 def read_sensor(sensor_id):
     conn = sqlite3.connect(db_path)

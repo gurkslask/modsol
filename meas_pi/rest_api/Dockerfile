@@ -1,4 +1,8 @@
-FROM python:3
-WORKDIR /usr/src/rest_api
+FROM arm32v6/alpine
+WORKDIR /code
 COPY requirements.txt ./
-RUN pip install --no-cache-dir flask
+RUN apk add python3-dev
+RUN pip3 install -r requirements.txt
+ENTRYPOINT ["python3"]
+CMD ["rest.py"]
+
